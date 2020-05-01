@@ -1,13 +1,24 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
+
+	"github.com/crazyfacka/gosaneweb/domain"
 
 	"github.com/labstack/echo"
 )
 
 func test(c echo.Context) error {
-	fmt.Printf("%+v\n", sh.Devices())
-	return c.String(http.StatusOK, "test")
+	devices := sh.Devices()
+
+	dev := devices[0]
+	dev.Ft[domain.MODE].ToUse = "Color"
+	dev.Ft[domain.RESOLUTION].ToUse = "100"
+
+	file, err := sh.Scan(dev)
+	if err != nil {
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
+	return c.File(file)
 }

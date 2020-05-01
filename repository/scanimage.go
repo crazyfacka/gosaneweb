@@ -2,6 +2,7 @@ package repository
 
 import (
 	"bytes"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -9,6 +10,8 @@ import (
 	"github.com/crazyfacka/gosaneweb/domain"
 	"github.com/rs/zerolog/log"
 )
+
+var tempFilename = "output/output.png"
 
 // ScanImage represents the struct of the scanimage binary handler
 type ScanImage struct {
@@ -34,6 +37,8 @@ func (si *ScanImage) Devices() domain.Devices {
 	var out bytes.Buffer
 
 	if si.devices == nil {
+		log.Info().Str("driver", "ScanImage").Msg("Searching for devices")
+
 		cmd := exec.Command(si.binary, "-A")
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
@@ -52,15 +57,59 @@ func (si *ScanImage) Devices() domain.Devices {
 			Name: deviceMatches[1],
 		}
 
+		device.Ft = make(map[int]*domain.Feature)
+
 		for _, m := range featureMatches {
 			feature := device.ParseFeature(m[1], m[2], m[3])
-			if feature.Type > domain.NONE {
-				device.Ft = append(device.Ft, feature)
+			if feature != nil {
+				device.Ft[feature.Type] = feature
 			}
 		}
 
 		si.devices = append(si.devices, device)
+
+		log.Info().Int("count", len(deviceMatches)-1).Msg("Found devices")
+		log.Debug().Interface("data", si.devices).Msg("Device data")
 	}
 
 	return si.devices
+}
+
+// Scan scans an image
+func (si *ScanImage) Scan(device domain.Device) (string, error) {
+	var out bytes.Buffer
+
+	log.Info().Str("driver", "ScanImage").Msg("Scanning image")
+
+	if _, err := os.Stat("output"); err != nil {
+		os.Mkdir("output", os.ModePerm)
+	}
+
+	args := []string{
+		"--mode", device.Ft[domain.MODE].ToUse,
+		"--resolution", device.Ft[domain.RESOLUTION].ToUse,
+		"--brightness", device.Ft[domain.BRIGHTNESS].ToUse,
+		"--contrast", device.Ft[domain.CONTRAST].ToUse,
+		"-l", device.Ft[domain.L].ToUse,
+		"-t", device.Ft[domain.T].ToUse,
+		"-x", device.Ft[domain.X].ToUse,
+		"-y", device.Ft[domain.Y].ToUse,
+		"--format", "png",
+	}
+
+	log.Debug().Str("cmd", si.binary).Strs("args", args).Msg("Executing")
+
+	cmd := exec.Command(si.binary, args...)
+	cmd.Stdout = &out
+	if err := cmd.Run(); err != nil {
+		log.Error().Strs("params", args).Err(err).Msg("Error doing scan")
+		return "", err
+	}
+
+	if err := ioutil.WriteFile(tempFilename, out.Bytes(), 0644); err != nil {
+		log.Error().Err(err).Msg("Error writing file")
+		return "", err
+	}
+
+	return tempFilename, nil
 }

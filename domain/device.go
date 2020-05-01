@@ -35,10 +35,11 @@ type Feature struct {
 	Ranged  bool
 	Values  []string
 	Default string
+	ToUse   string
 }
 
 // Features represent a set of Feature
-type Features []Feature
+type Features map[int]*Feature
 
 // Device represents a scanner device
 type Device struct {
@@ -49,17 +50,23 @@ type Device struct {
 // Devices represent a set of Device
 type Devices []Device
 
-func parseValues(values string, def string) ([]string, bool) {
+func parseValues(values string, def string) ([]string, string, bool) {
 	var parsedValues []string
 	var ranged bool
 
 	if strings.Contains(values, "..") {
 		ranged = true
 		parsedValues = strings.Split(values, "..")
+		for k, v := range parsedValues {
+			if idx := strings.Index(v, "."); idx != -1 {
+				parsedValues[k] = v[0:idx]
+			}
+		}
 	} else {
 		ranged = false
 		parsedValues = strings.Split(values, "|")
 	}
+
 	_, err := strconv.ParseFloat(def, 32)
 	if err == nil {
 		re := regexp.MustCompile(`[0-9\.]+`)
@@ -67,40 +74,45 @@ func parseValues(values string, def string) ([]string, bool) {
 		parsedValues[len(parsedValues)-1] = filtered
 	}
 
-	return parsedValues, ranged
+	if idx := strings.Index(def, "."); idx != -1 {
+		def = def[0:idx]
+	}
+
+	return parsedValues, def, ranged
 }
 
 // ParseFeature parses a feature given three parameters
-func (d *Device) ParseFeature(name string, values string, def string) Feature {
-	var f Feature
+func (d *Device) ParseFeature(name string, values string, def string) *Feature {
+	var f *Feature
 
 	switch strings.TrimLeft(name, "-") {
 	case "mode":
-		f = Feature{Type: MODE}
+		f = &Feature{Type: MODE}
 	case "resolution":
-		f = Feature{Type: RESOLUTION}
+		f = &Feature{Type: RESOLUTION}
 	case "source":
-		f = Feature{Type: SOURCE}
+		f = &Feature{Type: SOURCE}
 	case "brightness":
-		f = Feature{Type: BRIGHTNESS}
+		f = &Feature{Type: BRIGHTNESS}
 	case "contrast":
-		f = Feature{Type: CONTRAST}
+		f = &Feature{Type: CONTRAST}
 	case "l":
-		f = Feature{Type: L}
+		f = &Feature{Type: L}
 	case "t":
-		f = Feature{Type: T}
+		f = &Feature{Type: T}
 	case "x":
-		f = Feature{Type: X}
+		f = &Feature{Type: X}
 	case "y":
-		f = Feature{Type: Y}
+		f = &Feature{Type: Y}
 	}
 
-	if f.Type > NONE {
-		vals, ranged := parseValues(values, def)
+	if f != nil {
+		values, def, ranged := parseValues(values, def)
 
 		f.Ranged = ranged
-		f.Values = vals
+		f.Values = values
 		f.Default = def
+		f.ToUse = def
 	}
 
 	return f
