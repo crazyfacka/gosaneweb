@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/crazyfacka/gosaneweb/domain"
+	"github.com/crazyfacka/gosaneweb/repository"
 	"github.com/crazyfacka/gosaneweb/routes"
 	"github.com/rs/zerolog/log"
 )
@@ -14,5 +15,11 @@ func main() {
 		os.Exit(-1)
 	}
 
-	routes.Start()
+	scanHandler, err := repository.InitScanImage()
+	if err != nil {
+		log.Error().Err(err).Msg("Error getting scan handler")
+		os.Exit(-1)
+	}
+
+	routes.Start(scanHandler)
 }

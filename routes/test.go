@@ -7,5 +7,6 @@ import (
 )
 
 func test(c echo.Context) error {
+	sh.Devices()
 	return c.String(http.StatusOK, "test")
 }

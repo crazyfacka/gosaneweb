@@ -14,8 +14,9 @@ import (
 var Confs *c
 
 type c struct {
-	Debug bool
-	Port  int
+	Debug           bool
+	Port            int
+	ScanImageBinary string
 }
 
 // LoadConfiguration loads all configs (flags and file) to memory
@@ -45,8 +46,8 @@ func LoadConfiguration() error {
 
 	log.Debug().Interface(".gosaneweb", viper.AllSettings()).Msg("Loaded configuration")
 
-	port := viper.GetInt("port")
-	Confs.Port = port
+	Confs.Port = viper.GetInt("port")
+	Confs.ScanImageBinary = viper.GetString("scanimage")
 
 	return nil
 }
