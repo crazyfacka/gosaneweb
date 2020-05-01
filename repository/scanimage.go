@@ -64,8 +64,3 @@ func (si *ScanImage) Devices() domain.Devices {
 
 	return si.devices
 }
-
-// Features returns all available features for a given device
-func (si *ScanImage) Features() domain.Features {
-	return nil
-}
