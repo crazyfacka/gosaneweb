@@ -2,7 +2,6 @@ package repository
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -10,8 +9,6 @@ import (
 	"github.com/crazyfacka/gosaneweb/domain"
 	"github.com/rs/zerolog/log"
 )
-
-var tempFilename = "output/output.png"
 
 // ScanImage represents the struct of the scanimage binary handler
 type ScanImage struct {
@@ -76,14 +73,10 @@ func (si *ScanImage) Devices() domain.Devices {
 }
 
 // Scan scans an image
-func (si *ScanImage) Scan(device domain.Device) (string, error) {
+func (si *ScanImage) Scan(device domain.Device) ([]byte, error) {
 	var out bytes.Buffer
 
 	log.Info().Str("driver", "ScanImage").Msg("Scanning image")
-
-	if _, err := os.Stat("output"); err != nil {
-		os.Mkdir("output", os.ModePerm)
-	}
 
 	args := []string{
 		"--mode", device.Ft[domain.MODE].ToUse,
@@ -103,13 +96,8 @@ func (si *ScanImage) Scan(device domain.Device) (string, error) {
 	cmd.Stdout = &out
 	if err := cmd.Run(); err != nil {
 		log.Error().Strs("params", args).Err(err).Msg("Error doing scan")
-		return "", err
+		return nil, err
 	}
 
-	if err := ioutil.WriteFile(tempFilename, out.Bytes(), 0644); err != nil {
-		log.Error().Err(err).Msg("Error writing file")
-		return "", err
-	}
-
-	return tempFilename, nil
+	return out.Bytes(), nil
 }

@@ -20,5 +20,5 @@ func test(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
-	return c.File(file)
+	return c.Blob(http.StatusOK, "image/png", file)
 }
