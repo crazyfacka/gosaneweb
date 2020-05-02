@@ -54,7 +54,7 @@ func (si *ScanImage) Devices() domain.Devices {
 			Name: deviceMatches[1],
 		}
 
-		device.Ft = make(map[int]*domain.Feature)
+		device.Ft = make(map[string]*domain.Feature)
 
 		for _, m := range featureMatches {
 			feature := device.ParseFeature(m[1], m[2], m[3])

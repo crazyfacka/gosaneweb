@@ -20,5 +20,7 @@ func Start(scanHandler repository.Scan) {
 		e.GET("/test", test)
 	}
 
+	e.GET("/devices", devices)
+
 	e.Logger.Fatal(e.Start(":" + strconv.Itoa(domain.Confs.Port)))
 }

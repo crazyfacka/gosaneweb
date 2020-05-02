@@ -7,44 +7,44 @@ import (
 )
 
 const (
-	// NONE iota
-	NONE = iota
-	// MODE iota
-	MODE
-	// RESOLUTION iota
-	RESOLUTION
-	// SOURCE iota
-	SOURCE
-	// BRIGHTNESS iota
-	BRIGHTNESS
-	// CONTRAST iota
-	CONTRAST
-	// L iota
-	L
-	// T iota
-	T
-	// X iota
-	X
-	// Y iota
-	Y
+	// NONE const
+	NONE string = "NONE"
+	// MODE const
+	MODE string = "MODE"
+	// RESOLUTION const
+	RESOLUTION string = "RESOLUTION"
+	// SOURCE const
+	SOURCE string = "SOURCE"
+	// BRIGHTNESS const
+	BRIGHTNESS string = "BRIGHTNESS"
+	// CONTRAST const
+	CONTRAST string = "CONTRAST"
+	// L const
+	L string = "L"
+	// T const
+	T string = "T"
+	// X const
+	X string = "X"
+	// Y const
+	Y string = "Y"
 )
 
 // Feature represents a capability of the scanner device
 type Feature struct {
-	Type    int
-	Ranged  bool
-	Values  []string
-	Default string
-	ToUse   string
+	Type    string   `json:"type"`
+	Ranged  bool     `json:"ranged"`
+	Values  []string `json:"values"`
+	Default string   `json:"default"`
+	ToUse   string   `json:"to_use"`
 }
 
 // Features represent a set of Feature
-type Features map[int]*Feature
+type Features map[string]*Feature
 
 // Device represents a scanner device
 type Device struct {
-	Name string
-	Ft   Features
+	Name string   `json:"name"`
+	Ft   Features `json:"features"`
 }
 
 // Devices represent a set of Device
