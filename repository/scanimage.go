@@ -75,20 +75,47 @@ func (si *ScanImage) Devices() domain.Devices {
 // Scan scans an image
 func (si *ScanImage) Scan(device domain.Device) ([]byte, error) {
 	var out bytes.Buffer
+	var args []string
 
 	log.Info().Str("driver", "ScanImage").Msg("Scanning image")
 
-	args := []string{
-		"--mode", device.Ft[domain.MODE].ToUse,
-		"--resolution", device.Ft[domain.RESOLUTION].ToUse,
-		"--brightness", device.Ft[domain.BRIGHTNESS].ToUse,
-		"--contrast", device.Ft[domain.CONTRAST].ToUse,
-		"-l", device.Ft[domain.L].ToUse,
-		"-t", device.Ft[domain.T].ToUse,
-		"-x", device.Ft[domain.X].ToUse,
-		"-y", device.Ft[domain.Y].ToUse,
-		"--format", "png",
+	if v, ok := device.Ft[domain.MODE]; ok {
+		args = append(args, "--mode", v.ToUse)
 	}
+
+	if v, ok := device.Ft[domain.SOURCE]; ok {
+		args = append(args, "--source", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.RESOLUTION]; ok {
+		args = append(args, "--resolution", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.BRIGHTNESS]; ok {
+		args = append(args, "--brightness", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.CONTRAST]; ok {
+		args = append(args, "--contrast", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.L]; ok {
+		args = append(args, "-l", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.T]; ok {
+		args = append(args, "-t", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.X]; ok {
+		args = append(args, "-x", v.ToUse)
+	}
+
+	if v, ok := device.Ft[domain.Y]; ok {
+		args = append(args, "-y", v.ToUse)
+	}
+
+	args = append(args, "--format", "png")
 
 	log.Debug().Str("cmd", si.binary).Strs("args", args).Msg("Executing")
 
@@ -99,5 +126,6 @@ func (si *ScanImage) Scan(device domain.Device) ([]byte, error) {
 		return nil, err
 	}
 
+	log.Debug().Int("bytes", out.Len()).Msg("Scan complete")
 	return out.Bytes(), nil
 }
