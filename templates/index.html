@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <title>GO Sane Web</title>
     <link rel="stylesheet" type="text/css" href="static/main.css">
+    <script type="text/javascript">
+        const payload = JSON.parse('{{.Payload}}');
+    </script>
 </head>
 
 <body>
@@ -45,14 +48,14 @@
                 </div>
                 <div class="dual_option">
                     <label for="x">X [{{.X.Min}}..{{.X.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="x" id="x" placeholder="{{.X.Default}}">
                     <label for="y">Y [{{.Y.Min}}..{{.Y.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="x" id="x" placeholder="{{.X.Default}}">
                     <input type="text" pattern="[0-9]" name="y" id="y" placeholder="{{.Y.Default}}">
                 </div>
                 <div class="dual_option">
                     <label for="top">Top [{{.Top.Min}}..{{.Top.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="top" id="top" placeholder="{{.Top.Default}}">
                     <label for="left">Left [{{.Left.Min}}..{{.Left.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="top" id="top" placeholder="{{.Top.Default}}">
                     <input type="text" pattern="[0-9]" name="left" id="left" placeholder="{{.Left.Default}}">
                 </div>
             </div>

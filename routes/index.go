@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/crazyfacka/gosaneweb/domain"
@@ -28,10 +29,17 @@ type renderData struct {
 	Y          rangedDefault
 	Top        rangedDefault
 	Left       rangedDefault
+
+	Payload string
 }
 
 func index(c echo.Context) error {
 	device := sh.Devices()[0]
+
+	jsonify, err := json.Marshal(device)
+	if err != nil {
+		return c.NoContent(http.StatusInternalServerError)
+	}
 
 	data := &renderData{
 		Name: device.Name,
@@ -73,6 +81,8 @@ func index(c echo.Context) error {
 			Max:     device.Ft[domain.L].Values[1],
 			Default: device.Ft[domain.L].Default,
 		},
+
+		Payload: string(jsonify),
 	}
 
 	return c.Render(http.StatusOK, "index.html", data)

@@ -12,6 +12,13 @@ html, body {
 div {
     border: 1px solid black;
 }
+label {
+    display: block;
+}
+input, select {
+    width: 90%;
+    height: max-content;
+}
 
 .container {
     display: grid;
@@ -26,6 +33,17 @@ div {
 .settings {
     display: grid;
 }
+.option {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: 10px;
+}
+.option > label, .dual_option > label {
+    align-self: end;
+}
+.option > input, .dual_option > input {
+    align-self: start;
+}
 .option, .dual_option {
     padding: 5px;
     background-color: #fafafa;
@@ -34,6 +52,7 @@ div {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 10px;
+    row-gap: 10px;
 }
 .buttons {
     padding: 10px;
