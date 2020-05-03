@@ -34,6 +34,7 @@ func Start(scanHandler repository.Scan) {
 	e.Renderer = t
 
 	e.GET("/", index)
+	e.Static("/static", "static")
 	e.GET("/devices", devices)
 	e.POST("/scan", scan)
 

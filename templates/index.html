@@ -1,6 +1,71 @@
-<html>
-    <body>
-        <h1>Hello, {{.}}!</h1>
-    </body>
-</html>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8">
+    <title>GO Sane Web</title>
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="side">
+            <div class="settings">
+                <div class="option">
+                    <label for="mode">Mode</label>
+                    <select name="mode" id="mode">
+                        {{range .Modes.Values}}
+                            {{if eq $.Modes.Default .}}
+                                <option selected value="{{.}}">{{.}}</option>
+                            {{else}}
+                                <option value="{{.}}">{{.}}</option>
+                            {{end}}
+                        {{end}}
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="resolution">Resolution</label>
+                    <select name="resolution" id="resolution">
+                        {{range .Resolution.Values}}
+                            {{if eq $.Resolution.Default .}}
+                                <option selected value="{{.}}">{{.}}</option>
+                            {{else}}
+                                <option value="{{.}}">{{.}}</option>
+                            {{end}}
+                        {{end}}
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="brightness">Brightness [{{.Brightness.Min}}..{{.Brightness.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="brightness" id="brightness" placeholder="{{.Brightness.Default}}">
+                </div>
+                <div class="option">
+                    <label for="contrast">Contrast [{{.Contrast.Min}}..{{.Contrast.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="contrast" id="contrast" placeholder="{{.Contrast.Default}}">
+                </div>
+                <div class="dual_option">
+                    <label for="x">X [{{.X.Min}}..{{.X.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="x" id="x" placeholder="{{.X.Default}}">
+                    <label for="y">Y [{{.Y.Min}}..{{.Y.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="y" id="y" placeholder="{{.Y.Default}}">
+                </div>
+                <div class="dual_option">
+                    <label for="top">Top [{{.Top.Min}}..{{.Top.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="top" id="top" placeholder="{{.Top.Default}}">
+                    <label for="left">Left [{{.Left.Min}}..{{.Left.Max}}]</label>
+                    <input type="text" pattern="[0-9]" name="left" id="left" placeholder="{{.Left.Default}}">
+                </div>
+            </div>
+            <div class="buttons">
+                <div class="button">PV</div>
+                <div class="button">SC</div>
+            </div>
+        </div>
+        <div class="contents">
+            Contents
+        </div>
+        <div class="footer">{{.Name}}</div>
+    </div>
+</body>
+
+</html>
