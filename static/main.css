@@ -78,6 +78,9 @@ input, select {
     position: relative;
     top: 1px;
 }
+.contents {
+    text-align: center;
+}
 .footer {
     grid-column: 1 / span 2;
 }

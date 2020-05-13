@@ -109,6 +109,21 @@ func (d *Device) ParseFeature(name string, values string, def string) *Feature {
 	if f != nil {
 		values, def, ranged := parseValues(values, def)
 
+		if f.Type == MODE {
+			var newValues []string
+			for _, v := range values {
+				if v != "Lineart" {
+					newValues = append(newValues, v)
+				}
+			}
+
+			if def == "Lineart" {
+				def = newValues[0]
+			}
+
+			values = newValues
+		}
+
 		f.Ranged = ranged
 		f.Values = values
 		f.Default = def

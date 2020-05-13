@@ -40,35 +40,36 @@
                 </div>
                 <div class="option">
                     <label for="brightness">Brightness [{{.Brightness.Min}}..{{.Brightness.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="brightness" id="brightness" placeholder="{{.Brightness.Default}}">
+                    <input type="text" pattern="[0-9]" name="brightness" id="brightness" value="{{.Brightness.Default}}">
                 </div>
                 <div class="option">
                     <label for="contrast">Contrast [{{.Contrast.Min}}..{{.Contrast.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="contrast" id="contrast" placeholder="{{.Contrast.Default}}">
+                    <input type="text" pattern="[0-9]" name="contrast" id="contrast" value="{{.Contrast.Default}}">
                 </div>
                 <div class="dual_option">
                     <label for="x">X [{{.X.Min}}..{{.X.Max}}]</label>
                     <label for="y">Y [{{.Y.Min}}..{{.Y.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="x" id="x" placeholder="{{.X.Default}}">
-                    <input type="text" pattern="[0-9]" name="y" id="y" placeholder="{{.Y.Default}}">
+                    <input type="text" pattern="[0-9]" name="x" id="x" value="{{.X.Default}}">
+                    <input type="text" pattern="[0-9]" name="y" id="y" value="{{.Y.Default}}">
                 </div>
                 <div class="dual_option">
                     <label for="top">Top [{{.Top.Min}}..{{.Top.Max}}]</label>
                     <label for="left">Left [{{.Left.Min}}..{{.Left.Max}}]</label>
-                    <input type="text" pattern="[0-9]" name="top" id="top" placeholder="{{.Top.Default}}">
-                    <input type="text" pattern="[0-9]" name="left" id="left" placeholder="{{.Left.Default}}">
+                    <input type="text" pattern="[0-9]" name="top" id="top" value="{{.Top.Default}}">
+                    <input type="text" pattern="[0-9]" name="left" id="left" value="{{.Left.Default}}">
                 </div>
             </div>
             <div class="buttons">
-                <div class="button">PV</div>
-                <div class="button">SC</div>
+                <div class="button" onclick="getPreview()">PV</div>
+                <div class="button" onclick="scanFile()">SC</div>
             </div>
         </div>
         <div class="contents">
-            Contents
+            <img id="image_content">
         </div>
         <div class="footer">{{.Name}}</div>
     </div>
+    <script src="static/main.js"></script>
 </body>
 
 </html>
