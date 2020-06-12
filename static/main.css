@@ -9,9 +9,6 @@ html, body {
     margin: 0;
     font-family: 'Dosis', Fallback, sans-serif;
 }
-div {
-    border: 1px solid black;
-}
 label {
     display: block;
 }
@@ -27,6 +24,7 @@ input, select {
     grid-template-rows: auto 30px;
 }
 .side {
+    border-right: 1px solid #eaeaea;
     display: grid;
     grid-template-rows: auto 10%;
 }
@@ -79,8 +77,10 @@ input, select {
     top: 1px;
 }
 .contents {
-    text-align: center;
+    padding: 10px;
+    background-color: #212121;
 }
 .footer {
     grid-column: 1 / span 2;
+    padding-left: 6px;
 }

@@ -2,6 +2,27 @@ function displayBlob(data) {
     const urlCreator = window.URL || window.webkitURL;
     const imageUrl = urlCreator.createObjectURL(data);
     document.querySelector('#image_content').src = imageUrl;
+
+    const stage = Jcrop.attach('image_content');
+    stage.listen('crop.change', (widget, e) => {
+        let w = stage.el.clientWidth;
+        let wMM = payload.features.X.values[1];
+
+        let h = stage.el.clientHeight;
+        let hMM = payload.features.Y.values[1];
+
+        let posMM = {
+            top: Math.round(widget.pos.y * hMM / h),
+            left: Math.round(widget.pos.x * wMM / w),
+            x: Math.round((widget.pos.x + widget.pos.w) * wMM / w),
+            y: Math.round((widget.pos.y + widget.pos.h) * hMM / h),
+        };
+
+        document.querySelector('#x').value = posMM.x;
+        document.querySelector('#y').value = posMM.y;
+        document.querySelector('#top').value = posMM.top;
+        document.querySelector('#left').value = posMM.left;
+    });
 }
 
 function downloadBlob(data) {
