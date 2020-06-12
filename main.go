@@ -21,5 +21,6 @@ func main() {
 		os.Exit(-1)
 	}
 
+	scanHandler.Devices()
 	routes.Start(scanHandler)
 }
