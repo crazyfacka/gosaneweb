@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <title>GO Sane Web</title>
     <link rel="stylesheet" type="text/css" href="static/main.css">
+    <link rel="stylesheet" type="text/css" href="static/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="static/fontawesome/css/solid.min.css">
     <link rel="stylesheet" type="text/css" href="static/jcrop.css">
     <script type="text/javascript">
         const payload = JSON.parse('{{.Payload}}');
@@ -61,8 +63,14 @@
                 </div>
             </div>
             <div class="buttons">
-                <div class="button" onclick="getPreview()">PV</div>
-                <div class="button" onclick="scanFile()">SC</div>
+                <div class="button" onclick="getPreview()">
+                    <i class="fas fa-search"></i>
+                    <span>Preview</span>
+                </div>
+                <div class="button" onclick="scanFile()">
+                    <i class="fas fa-image"></i>
+                    <span>Scan</span>
+                </div>
             </div>
         </div>
         <div class="contents">

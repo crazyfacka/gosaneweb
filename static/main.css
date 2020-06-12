@@ -61,12 +61,18 @@ input, select {
     background-color: #768d87;
     border-radius: 5px;
     border: 1px solid #566963;
-    display: inline-block;
+    display: grid;
+    align-content: center;
     cursor: pointer;
     color: #ffffff;
     padding: 11px 23px;
     text-decoration: none;
     text-shadow: 0px -1px 0px #2b665e;
+    text-align: center;
+    font-size: 1.3rem;
+}
+.button > span {
+    font-size: 0.8rem;
 }
 .button:hover {
     background: linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
