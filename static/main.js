@@ -3,6 +3,10 @@ function displayBlob(data) {
     const imageUrl = urlCreator.createObjectURL(data);
     document.querySelector('#image_content').src = imageUrl;
 
+    if (!!document.querySelector('.jcrop-stage')) {
+        return;
+    }
+
     const stage = Jcrop.attach('image_content');
     stage.listen('crop.change', (widget, e) => {
         let w = stage.el.clientWidth;
