@@ -2,6 +2,8 @@ package repository
 
 import (
 	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -50,23 +52,48 @@ func (si *ScanImage) Devices() domain.Devices {
 		featuresRe := regexp.MustCompile(`\s+([-]{1,2}[-a-zA-Z0-9]+) ?(.*) \[(.*)\]\n`)
 		featureMatches := featuresRe.FindAllStringSubmatch(output, -1)
 
-		device := domain.Device{
-			Name: deviceMatches[1],
-		}
-
-		device.Ft = make(map[string]*domain.Feature)
-
-		for _, m := range featureMatches {
-			feature := device.ParseFeature(m[1], m[2], m[3])
-			if feature != nil {
-				device.Ft[feature.Type] = feature
+		if len(deviceMatches) >= 2 {
+			device := domain.Device{
+				Name: deviceMatches[1],
 			}
+
+			device.Ft = make(map[string]*domain.Feature)
+
+			for _, m := range featureMatches {
+				feature := device.ParseFeature(m[1], m[2], m[3])
+				if feature != nil {
+					device.Ft[feature.Type] = feature
+				}
+			}
+
+			si.devices = append(si.devices, device)
+
+			log.Info().Int("count", len(deviceMatches)-1).Msg("Found devices")
+			log.Debug().Interface("data", si.devices).Msg("Device data")
+		}
+	}
+
+	if si.devices == nil {
+		log.Info().Msg("Loading device info from cache")
+		dat, err := ioutil.ReadFile("devices.json")
+		if err != nil {
+			log.Error().Err(err).Msg("Error reading devices from file")
 		}
 
-		si.devices = append(si.devices, device)
+		err = json.Unmarshal(dat, &si.devices)
+		if err != nil {
+			log.Error().Err(err).Msg("Error unmarshalling data")
+		}
+	} else {
+		jsonDevices, err := json.MarshalIndent(si.devices, "", "  ")
+		if err != nil {
+			log.Error().Err(err).Msg("Error marshalling devices data to JSON")
+		}
 
-		log.Info().Int("count", len(deviceMatches)-1).Msg("Found devices")
-		log.Debug().Interface("data", si.devices).Msg("Device data")
+		err = ioutil.WriteFile("devices.json", jsonDevices, 0644)
+		if err != nil {
+			log.Error().Err(err).Msg("Error writing devices data to output file")
+		}
 	}
 
 	return si.devices
